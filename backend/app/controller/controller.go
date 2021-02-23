@@ -18,7 +18,7 @@ func FetchAllTasks(c *gin.Context) {
 
 //AddTask は商品情報をDBに登録する
 func AddTask(c *gin.Context) {
-	taskName := c.PostForm("name")
+	taskName := c.PostForm("taskname")
 
 	var task = entity.Task{
 		Name: taskName,

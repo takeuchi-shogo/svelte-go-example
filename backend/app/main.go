@@ -5,6 +5,7 @@ import (
 
 	"svelte-go-sample/controller"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -14,18 +15,19 @@ func main() {
 
 	router.LoadHTMLFiles("svelte-go-sample/frontend/public/index.html")
 
-	router.GET("/tasklist", func(c *gin.Context) {
-		c.HTML(200, "index.html", gin.H{})
-	})
+	//cors対応
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5000"}
+	router.Use(cors.New(config))
 
 	//全てのタスク情報をJSONで返す
-	router.GET("/alltasks", controller.FetchAllTasks)
+	router.GET("/tasks", controller.FetchAllTasks)
 
-	//一つの方品情報をJSONで返す
-	router.POST("/addtask", controller.AddTask)
+	//一つのタスク情報をJSONで返す
+	router.POST("/tasks", controller.AddTask)
 
 	//タスク情報を削除する
-	router.POST("/deletetask", controller.DeleteTask)
+	router.POST("/tasks/:id", controller.DeleteTask)
 
 	if err := router.Run(); err != nil {
 		log.Fatal("Server Run Failed.: ", err)

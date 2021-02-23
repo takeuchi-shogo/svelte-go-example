@@ -52,6 +52,7 @@ func FindAllTasks() []entity.Task {
 	db := open()
 
 	db.Order("ID asc").Find(&tasks)
+	fmt.Println(tasks)
 
 	defer db.Close()
 
@@ -84,6 +85,7 @@ func DeleteTask(taskID int) {
 
 	db := open()
 
+	//delete
 	db.Delete(&task, taskID)
 
 	defer db.Close()
