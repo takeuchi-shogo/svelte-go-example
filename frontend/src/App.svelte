@@ -2,30 +2,30 @@
     import { onMount } from 'svelte';
 
     let tasks = [];
-    let name = '';
-                        
+    let name = "挨拶をする";
+    let result = null
+                      
     onMount(async () => {
         const res = await fetch('http://localhost:8080/tasks', {method: 'GET'});
         tasks = await res.json();
-        console.log(tasks);
     });
 
-    const addTask = async () => {
-        const res = await fetch (
-            `http://localhost:8080/tasks`,
-            {
-                method: `POST`,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({name: name, done: false})
-            }
+    const addTask = async() => {
+        const res = await fetch (`http://localhost:8080/addtask`,　{
+            method: 'POST',
+            header: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                name: name,
+                done: false
+            })
+        }
         )
+        console.log(res.json())
 
         const newTask = await res.json();
-        console.log(newTask);
+        result = JSON.stringify(newTask)
         tasks = [...tasks, newTask];
-        name = '';
+        name = "";
     };
 
     const remove = async (task) => {
@@ -79,5 +79,8 @@
             </li>
             {/each}
         </ul>
+        <hr>
+        <p>result:</p>
+        <pre>{result}</pre>
     </div>
 </main>

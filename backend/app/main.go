@@ -24,10 +24,13 @@ func main() {
 	router.GET("/tasks", controller.FetchAllTasks)
 
 	//一つのタスク情報をJSONで返す
-	router.POST("/tasks", controller.AddTask)
+	router.POST("/addtask", controller.AddTask)
+
+	//タスク情報(done)の変更
+	router.POST("tasks/:id", controller.ChangeTask)
 
 	//タスク情報を削除する
-	router.POST("/tasks/:id", controller.DeleteTask)
+	router.DELETE("/tasks/:id", controller.DeleteTask)
 
 	if err := router.Run(); err != nil {
 		log.Fatal("Server Run Failed.: ", err)

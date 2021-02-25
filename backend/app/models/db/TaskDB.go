@@ -40,6 +40,8 @@ func open() *gorm.DB {
 
 	db.LogMode(true)
 
+	db.SingularTable(true)
+
 	db.AutoMigrate(&entity.Task{})
 
 	return db
@@ -76,6 +78,16 @@ func InsertTask(registryTask *entity.Task) {
 	db := open()
 
 	db.Create(&registryTask)
+	defer db.Close()
+}
+
+//UpdateDoneTask は状態を更新する
+func UpdateDoneTask(taskID int, taskDone bool) {
+	task := []entity.Task{}
+	db := open()
+
+	db.Model(&task).Where("ID = ?", taskID).Update("Done", taskDone)
+
 	defer db.Close()
 }
 
